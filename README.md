@@ -4,6 +4,13 @@ This project is a simple survey or quiz application. It presents a series of que
 
 You can try it out here: [https://stefanwer.github.io/simple-survey/](https://stefanwer.github.io/simple-survey/)
 
+## Features
+
+- **Offline Mode:** The application is fully functional without an internet connection.
+- **Progressive Web App (PWA):** The application can be saved on your mobile phone or tablet for easy access.
+- **PDF Export:** You can download your results as a PDF file.
+- **Dynamic Questions:** Questions are loaded from a `questions.json` file, making them easy to customize.
+
 ## How to Use
 
 1. Open `index.html` in your web browser.
