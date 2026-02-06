@@ -12,6 +12,7 @@
         "options": [
             { "text": "Ich suche akribisch den Bug", "weight": 0.78 },
             { "text": "Ich frage sofort ChatGPT", "weight": 0.45 },
+            { "text": "Bugs? Ich kenn' nur Gremlins", "weight": 0.45 },
             { "text": "PC aus, Feierabend!", "weight": 0.05 }
         ]
     },
@@ -27,8 +28,7 @@
         "q": "Wie wichtig ist dir sauberes CSS?",
         "options": [
             { "text": "Überlebenswichtig!", "weight": 0.88 },
-            { "text": "Hauptsache es sieht okay aus", "weight": 0.50 },
-            { "text": "Inline-Styles für alles!", "weight": 0.10 }
+            { "text": "Hauptsache es sieht okay aus", "weight": 0.50 }
         ]
     },
     {
