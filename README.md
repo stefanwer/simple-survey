@@ -2,6 +2,8 @@
 
 This project is a simple survey or quiz application. It presents a series of questions to the user and then provides a result based on their answers.
 
+You can try it out here: [https://stefanwer.github.io/simple-survey/](https://stefanwer.github.io/simple-survey/)
+
 ## How to Use
 
 1. Open `index.html` in your web browser.
