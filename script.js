@@ -1,6 +1,5 @@
 let surveyData = [];
 let currentQuestionIndex = parseInt(sessionStorage.getItem('currentIndex')) || 0;
-// Array der bisherigen Einzel-Scores laden oder neu starten
 let scoreHistory = JSON.parse(sessionStorage.getItem('scoreHistory')) || [];
 
 async function initSurvey() {
@@ -32,7 +31,7 @@ function loadQuestion() {
     const currentData = surveyData[currentQuestionIndex];
     const totalQuestions = surveyData.length;
     const progressPercent = (currentQuestionIndex / totalQuestions) * 100;
-    
+
     progressBar.style.width = `${progressPercent}%`;
     progressText.innerText = `Frage ${currentQuestionIndex + 1} von ${totalQuestions}`;
 
@@ -55,24 +54,22 @@ function handleNext() {
     }
 
     const weight = parseFloat(selected.value);
-    
-    // Score in die Historie speichern
+
     scoreHistory[currentQuestionIndex] = weight;
     sessionStorage.setItem('scoreHistory', JSON.stringify(scoreHistory));
 
     currentQuestionIndex++;
     sessionStorage.setItem('currentIndex', currentQuestionIndex);
-    loadQuestion(); 
+    loadQuestion();
 }
 
-// --- NEU: ZURÜCK FUNKTION ---
 function handleBack() {
     if (currentQuestionIndex > 0) {
         currentQuestionIndex--;
-        // Den letzten Score-Eintrag entfernen (optional, wird bei handleNext überschrieben)
-        scoreHistory.pop(); 
+
+        scoreHistory.pop();
         sessionStorage.setItem('scoreHistory', JSON.stringify(scoreHistory));
-        
+
         sessionStorage.setItem('currentIndex', currentQuestionIndex);
         loadQuestion();
     }
@@ -82,7 +79,6 @@ initSurvey();
 
 if (window.location.pathname.includes('result.html')) {
     const history = JSON.parse(sessionStorage.getItem('scoreHistory')) || [];
-    // Alle Werte im Array zusammenzählen
     const totalScore = history.reduce((a, b) => a + b, 0);
     document.getElementById('score-display').innerText = totalScore.toFixed(2);
     sessionStorage.clear();
