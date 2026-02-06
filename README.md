@@ -7,6 +7,7 @@ This project is a simple survey or quiz application. It presents a series of que
 1. Open `index.html` in your web browser.
 2. Answer the questions presented on the `question.html` page.
 3. View your result on the `result.html` page.
+4. On the result page, you can also download your result as a PDF.
 
 ## Project Structure
 
