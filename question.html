@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Umfrage - Frage</title>
+</head>
+
+<body>
+    <div class="container" id="question-container">
+        <div class="progress-wrapper">
+            <div id="progress-bar"></div>
+        </div>
+        <p id="progress-text">Frage 0 von 0</p>
+
+        <h2 id="question-title">Lade Frage...</h2>
+        <div id="options-container" class="options"></div>
+
+        <div class="button-group">
+            <button id="back-btn" onclick="handleBack()">Zurück</button>
+            <button id="next-btn" onclick="handleNext()">Weiter</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

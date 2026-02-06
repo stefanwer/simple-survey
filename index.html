@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Umfrage Start</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Willkommen!</h1>
+        <p>Dies ist eine kleine dynamische Umfrage. Keine Daten werden gespeichert.</p>
+
+        <div class="center-btn-wrapper">
+            <button onclick="startSurvey()">Umfrage starten</button>
+        </div>
+    </div>
+
+    <script>
+        function startSurvey() {
+            sessionStorage.clear();
+            sessionStorage.setItem('currentIndex', '0');
+            sessionStorage.setItem('scoreHistory', JSON.stringify([])); // Historie leeren
+            window.location.href = 'question.html';
+        }
+    </script>
+</body>
+
+</html>
