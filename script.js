@@ -252,40 +252,40 @@ if (window.location.pathname.includes('result.html')) {
     let riskHTML = "";
 
     if (totalScore <= 5) {
-        // Niedriges Risiko [cite: 25]
+        // Niedriges Risiko
         riskHTML = `
             <div class="risk-card low-risk">
                 <h3>Niedriges Risiko (0-5 Punkte)</h3>
-                <p>Aktuell kein starker ATTR-Verdacht. [cite: 26]</p>
+                <p>Aktuell kein starker ATTR-Verdacht.</p>
                 <ul class="recommendations">
-                    <li>Re-Evaluation bei neuen Red Flags [cite: 27]</li>
-                    <li>ggf. Basisdiagnostik HF üblich [cite: 28]</li>
+                    <li>Re-Evaluation bei neuen Red Flags</li>
+                    <li>ggf. Basisdiagnostik HF üblich</li>
                 </ul>
             </div>`;
     } else if (totalScore <= 11) {
-        // Mittleres Risiko [cite: 29]
+        // Mittleres Risiko
         riskHTML = `
             <div class="risk-card medium-risk">
                 <h3>Mittleres Risiko (6-11 Punkte)</h3>
-                <p>Empfohlene Schritte: [cite: 30]</p>
+                <p>Empfohlene Schritte:</p>
                 <ul class="recommendations">
-                    <li>EKG + Echokardiographie [cite: 31]</li>
-                    <li>NT-proBNP/Troponin [cite: 32]</li>
-                    <li>Serum-/Urin-Immunfixation + freie Leichtketten [cite: 33]</li>
-                    <li>ggf. Zuweisung spezialisierte Kardiologie [cite: 34]</li>
+                    <li>EKG + Echokardiographie</li>
+                    <li>NT-proBNP/Troponin</li>
+                    <li>Serum-/Urin-Immunfixation + freie Leichtketten</li>
+                    <li>ggf. Zuweisung spezialisierte Kardiologie</li>
                 </ul>
             </div>`;
     } else {
-        // Hohes Risiko [cite: 35]
+        // Hohes Risiko
         riskHTML = `
             <div class="risk-card high-risk">
                 <h3>Hohes Risiko (≥12 Punkte)</h3>
-                <p>Klare Empfehlung: [cite: 36]</p>
+                <p>Klare Empfehlung:</p>
                 <ul class="recommendations">
-                    <li>Ausschluss AL-Amyloidose obligat [cite: 37]</li>
-                    <li>Knochenszintigrafie (DPD/PYP/HMDP) + SPECT [cite: 38]</li>
-                    <li>Zentrum für Amyloidose einbinden [cite: 39]</li>
-                    <li>ggf. genetische Abklärung [cite: 40]</li>
+                    <li>Ausschluss AL-Amyloidose obligat</li>
+                    <li>Knochenszintigrafie (DPD/PYP/HMDP) + SPECT</li>
+                    <li>Zentrum für Amyloidose einbinden</li>
+                    <li>ggf. genetische Abklärung</li>
                 </ul>
             </div>`;
     }
