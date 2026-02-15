@@ -27,7 +27,7 @@ async function initSurvey() {
 }
 
 function loadQuestion() {
-    const moduleHeader = document.getElementById('module-header'); // Neu
+    const moduleHeader = document.getElementById('module-header');
     const title = document.getElementById('question-title');
     const optionsDiv = document.getElementById('options-container');
     const progressBar = document.getElementById('progress-bar');
@@ -39,12 +39,11 @@ function loadQuestion() {
         return;
     }
 
+    const currentData = surveyData[currentQuestionIndex];
     backBtn.style.visibility = (currentQuestionIndex === 0) ? "hidden" : "visible";
 
-    const currentData = surveyData[currentQuestionIndex];
     const totalQuestions = surveyData.length;
     const progressPercent = (currentQuestionIndex / totalQuestions) * 100;
-
     progressBar.style.width = `${progressPercent}%`;
     progressText.innerText = `Frage ${currentQuestionIndex + 1} von ${totalQuestions}`;
 
@@ -52,10 +51,18 @@ function loadQuestion() {
     title.innerText = currentData.q;
     optionsDiv.innerHTML = "";
 
-    currentData.options.forEach((opt) => {
+    const standardOptions = [
+        { text: "Ja", weight: currentData.score },
+        { text: "Nein", weight: 0 },
+        { text: "Unbekannt", weight: 0 }
+    ];
+
+    standardOptions.forEach((opt) => {
         const label = document.createElement('label');
         label.className = "option";
-        label.innerHTML = `<input type="radio" name="answer" value="${opt.weight}"> ${opt.text}`;
+        label.innerHTML = `
+            <input type="radio" name="answer" value="${opt.weight}"> ${opt.text}
+        `;
         optionsDiv.appendChild(label);
     });
 }

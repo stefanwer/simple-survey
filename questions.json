@@ -3,18 +3,12 @@
     "moduleTitle": "Allgemeines",
     "questions": [
       {
-        "q": "Wie startest du am liebsten in den Tag?",
-        "options": [
-          {"text": "Kaffee", "weight": 0.8},
-          {"text": "Sport", "weight": 1.0}
-        ]
+        "q": "Hast du heute schon programmiert?",
+        "score": 3
       },
       {
-        "q": "Wie wichtig ist dir Struktur?",
-        "options": [
-          {"text": "Sehr", "weight": 0.9},
-          {"text": "Gar nicht", "weight": 0.2}
-        ]
+        "q": "Nutzt du ein Versionsverwaltungstool?",
+        "score": 2
       }
     ]
   },
@@ -22,11 +16,8 @@
     "moduleTitle": "Technik & Web",
     "questions": [
       {
-        "q": "Bevorzugst du HTML oder CSS?",
-        "options": [
-          {"text": "HTML", "weight": 0.5},
-          {"text": "CSS", "weight": 0.5}
-        ]
+        "q": "Kennst du dich mit CSS-Flexbox aus?",
+        "score": 1
       }
     ]
   }
