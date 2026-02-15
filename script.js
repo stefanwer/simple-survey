@@ -107,73 +107,132 @@ function handleBack() {
 function generatePDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-
+    
     const history = JSON.parse(sessionStorage.getItem('scoreHistory')) || [];
-    const totalScore = history.reduce((sum, item) => sum + (item.points || 0), 0).toFixed(2);
+    const totalScore = history.reduce((sum, item) => sum + (item.points || 0), 0);
 
+    // 1. Header & Gesamtscore
     doc.setFontSize(22);
     doc.setTextColor(40, 40, 40);
-    doc.text("Ergebnisse", 20, 20);
+    doc.text("ATTR-Screening-Score Ergebnis", 20, 20);
+    
+    doc.setFontSize(16);
+    doc.text(`Gesamtscore: ${totalScore.toFixed(0)} Punkte`, 20, 30);
 
-    doc.setFontSize(14);
-    doc.setTextColor(100, 100, 100);
-    doc.text(`Gesamt-Score: ${totalScore}`, 20, 30);
+    // 2. Risikoklassifikation (Ampel)
+    let riskColor = [40, 167, 69]; 
+    let riskTitle = "";
+    let recommendations = [];
 
-    doc.setDrawColor(40, 167, 69);
-    doc.setLineWidth(1);
-    doc.line(20, 35, 190, 35);
+    if (totalScore <= 5) {
+        riskColor = [40, 167, 69]; 
+        riskTitle = "Niedriges Risiko (0-5 Punkte)";
+        recommendations = ["Aktuell kein starker ATTR-Verdacht", "Re-Evaluation bei neuen Red Flags", "Ggf. Basisdiagnostik HF üblich"];
+    } else if (totalScore <= 11) {
+        riskColor = [255, 152, 0]; 
+        riskTitle = "Mittleres Risiko (6-11 Punkte)";
+        recommendations = ["EKG + Echokardiographie", "NT-proBNP/Troponin", "Serum-/Urin-Immunfixation + freie Leichtketten", "Ggf. Zuweisung spezialisierte Kardiologie"];
+    } else {
+        riskColor = [220, 53, 69]; 
+        riskTitle = "Hohes Risiko (>=12 Punkte)";
+        recommendations = ["Ausschluss AL-Amyloidose obligat", "Knochenszintigrafie (DPD/PYP/HMDP) + SPECT", "Zentrum für Amyloidose einbinden", "Ggf. genetische Abklärung"];
+    }
 
-    let y = 45;
+    doc.setFillColor(...riskColor);
+    doc.rect(20, 35, 170, 10, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text(riskTitle, 25, 42);
+
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    let recY = 52;
+    doc.text("Empfohlene Schritte:", 20, recY);
+    recommendations.forEach(rec => {
+        recY += 6;
+        doc.text(`- ${rec}`, 25, recY);
+    });
+
+    doc.setDrawColor(200, 200, 200);
+    doc.line(20, recY + 5, 190, recY + 5);
+
+    const gammopathiePositiv = history.some(item => 
+        item.question.includes("Monoklonale Gammopathie") && item.answer === "Ja"
+    );
+
+    if (gammopathiePositiv) {
+        doc.setFillColor(255, 241, 118); // Gelb
+        doc.rect(20, recY + 10, 170, 10, 'F');
+        doc.setDrawColor(251, 192, 45); // Rand
+        doc.rect(20, recY + 10, 170, 10, 'S');
+        
+        doc.setTextColor(0, 0, 0);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(11);
+        doc.text("ACHTUNG: AL-Amyloidose ausschließen!", 105, recY + 16.5, { align: "center" });
+        recY += 18;
+    }
+
+    // 3. Einzelergebnisse
+    let y = recY + 15;
     let lastModule = "";
 
     history.forEach((item, index) => {
-        if (y > 260) {
-            doc.addPage();
-            y = 20;
-        }
+        if (y > 270) { doc.addPage(); y = 20; }
 
+        // Modul-Header
         if (item.module !== lastModule) {
             y += 5;
-            doc.setFillColor(232, 245, 233);
-            doc.rect(20, y - 5, 170, 8, 'F');
-
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(12);
-            doc.setTextColor(40, 167, 69);
-            doc.text(item.module.toUpperCase(), 25, y);
-
+            doc.setFontSize(11);
+            doc.setTextColor(100, 100, 100);
+            doc.text(item.module, 20, y);
             lastModule = item.module;
-            y += 12;
+            y += 8;
         }
 
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(11);
+        // Frage (wieder in normaler Schrift)
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
         doc.setTextColor(0, 0, 0);
 
-        const splitQuestion = doc.splitTextToSize(`${index + 1}. ${item.question}`, 160);
+        const questionText = `${index + 1}. ${item.question}`;
+        const splitQuestion = doc.splitTextToSize(questionText, 160);
         doc.text(splitQuestion, 20, y);
         y += (splitQuestion.length * 6);
 
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(10);
-        doc.setTextColor(60, 60, 60);
-        doc.text(`Antwort: ${item.answer}`, 25, y);
-
+        // Antwortzeile mit gelber Markierung bei "Ja"
         doc.setFontSize(9);
+        if (item.answer === "Ja") {
+            // Gelber Hintergrund für "Antwort: Ja"
+            doc.setFillColor(255, 255, 0); 
+            doc.rect(24, y - 3.5, 20, 4.5, 'F'); 
+            doc.setTextColor(0, 0, 0); // Text bei Markierung schwarz
+        } else {
+            doc.setTextColor(80, 80, 80);
+        }
+
+        doc.text(`Antwort: ${item.answer}`, 25, y);
+        
+        // Punkte (immer grau und rechtsbündig)
+        doc.setTextColor(120, 120, 120);
         doc.text(`(${item.points} Pkt.)`, 170, y);
 
-        y += 12;
+        y += 10;
     });
 
+    // Fußzeile
     const pageCount = doc.internal.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
+    for(let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
         doc.setFontSize(8);
         doc.setTextColor(150, 150, 150);
         doc.text(`Seite ${i} von ${pageCount} - Generiert am ${new Date().toLocaleDateString()}`, 20, 285);
     }
 
-    doc.save("Umfrage_Ergebnis.pdf");
+    doc.save("ATTR_Screening_Ergebnis.pdf");
 }
 
 initSurvey();
@@ -181,5 +240,63 @@ initSurvey();
 if (window.location.pathname.includes('result.html')) {
     const history = JSON.parse(sessionStorage.getItem('scoreHistory')) || [];
     const totalScore = history.reduce((a, b) => a + (b.points || 0), 0);
-    document.getElementById('score-display').innerText = totalScore.toFixed(2);
+
+    const scoreDisplay = document.getElementById('score-display');
+    const riskContainer = document.getElementById('risk-evaluation');
+    const gammopathiePositiv = history.some(item => 
+        item.question.includes("Monoklonale Gammopathie") && item.answer === "Ja"
+    );
+
+    scoreDisplay.innerText = totalScore.toFixed(0);
+
+    let riskHTML = "";
+
+    if (totalScore <= 5) {
+        // Niedriges Risiko [cite: 25]
+        riskHTML = `
+            <div class="risk-card low-risk">
+                <h3>Niedriges Risiko (0-5 Punkte)</h3>
+                <p>Aktuell kein starker ATTR-Verdacht. [cite: 26]</p>
+                <ul class="recommendations">
+                    <li>Re-Evaluation bei neuen Red Flags [cite: 27]</li>
+                    <li>ggf. Basisdiagnostik HF üblich [cite: 28]</li>
+                </ul>
+            </div>`;
+    } else if (totalScore <= 11) {
+        // Mittleres Risiko [cite: 29]
+        riskHTML = `
+            <div class="risk-card medium-risk">
+                <h3>Mittleres Risiko (6-11 Punkte)</h3>
+                <p>Empfohlene Schritte: [cite: 30]</p>
+                <ul class="recommendations">
+                    <li>EKG + Echokardiographie [cite: 31]</li>
+                    <li>NT-proBNP/Troponin [cite: 32]</li>
+                    <li>Serum-/Urin-Immunfixation + freie Leichtketten [cite: 33]</li>
+                    <li>ggf. Zuweisung spezialisierte Kardiologie [cite: 34]</li>
+                </ul>
+            </div>`;
+    } else {
+        // Hohes Risiko [cite: 35]
+        riskHTML = `
+            <div class="risk-card high-risk">
+                <h3>Hohes Risiko (≥12 Punkte)</h3>
+                <p>Klare Empfehlung: [cite: 36]</p>
+                <ul class="recommendations">
+                    <li>Ausschluss AL-Amyloidose obligat [cite: 37]</li>
+                    <li>Knochenszintigrafie (DPD/PYP/HMDP) + SPECT [cite: 38]</li>
+                    <li>Zentrum für Amyloidose einbinden [cite: 39]</li>
+                    <li>ggf. genetische Abklärung [cite: 40]</li>
+                </ul>
+            </div>`;
+    }
+
+    if (gammopathiePositiv) {
+        const warningHTML = `
+            <div style="background-color: #fff176; border: 2px solid #fbc02d; padding: 15px; border-radius: 8px; margin-top: 15px; font-weight: bold; color: #000; text-align: center;">
+                ⚠️ WICHTIGER HINWEIS: AL-Amyloidose ausschließen!
+            </div>`;
+        riskContainer.innerHTML += warningHTML;
+    }
+    
+    riskContainer.innerHTML = riskHTML;
 }
