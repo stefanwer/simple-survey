@@ -5,7 +5,19 @@ let scoreHistory = JSON.parse(sessionStorage.getItem('scoreHistory')) || [];
 async function initSurvey() {
     try {
         const response = await fetch('questions.json');
-        surveyData = await response.json();
+        const modules = await response.json();
+
+        let moduleCounter = 1;
+        modules.forEach(module => {
+            module.questions.forEach(question => {
+                surveyData.push({
+                    ...question,
+                    displayTitle: `Modul ${moduleCounter}: ${module.moduleTitle}`
+                });
+            });
+            moduleCounter++;
+        });
+
         if (document.getElementById('question-container')) {
             loadQuestion();
         }
@@ -15,6 +27,7 @@ async function initSurvey() {
 }
 
 function loadQuestion() {
+    const moduleHeader = document.getElementById('module-header'); // Neu
     const title = document.getElementById('question-title');
     const optionsDiv = document.getElementById('options-container');
     const progressBar = document.getElementById('progress-bar');
@@ -35,6 +48,7 @@ function loadQuestion() {
     progressBar.style.width = `${progressPercent}%`;
     progressText.innerText = `Frage ${currentQuestionIndex + 1} von ${totalQuestions}`;
 
+    moduleHeader.innerText = currentData.displayTitle;
     title.innerText = currentData.q;
     optionsDiv.innerHTML = "";
 
@@ -53,12 +67,13 @@ function handleNext() {
         return;
     }
 
+    const currentData = surveyData[currentQuestionIndex];
     const weight = parseFloat(selected.value);
     const text = selected.parentElement.innerText.trim();
-    const questionText = document.getElementById('question-title').innerText;
 
     scoreHistory[currentQuestionIndex] = {
-        question: questionText,
+        module: currentData.displayTitle,
+        question: currentData.q,
         answer: text,
         points: weight
     };
@@ -87,32 +102,69 @@ function generatePDF() {
     const doc = new jsPDF();
 
     const history = JSON.parse(sessionStorage.getItem('scoreHistory')) || [];
-    const finalScore = history.reduce((sum, item) => sum + item.points, 0).toFixed(2);
+    const totalScore = history.reduce((sum, item) => sum + (item.points || 0), 0).toFixed(2);
 
     doc.setFontSize(22);
-    doc.text("Deine Umfrage-Ergebnisse", 20, 20);
+    doc.setTextColor(40, 40, 40);
+    doc.text("Ergebnisse", 20, 20);
 
-    doc.setFontSize(16);
-    doc.text(`Gesamt-Score: ${finalScore}`, 20, 35);
+    doc.setFontSize(14);
+    doc.setTextColor(100, 100, 100);
+    doc.text(`Gesamt-Score: ${totalScore}`, 20, 30);
 
-    doc.setLineWidth(0.5);
-    doc.line(20, 40, 190, 40);
+    doc.setDrawColor(40, 167, 69);
+    doc.setLineWidth(1);
+    doc.line(20, 35, 190, 35);
 
-    doc.setFontSize(12);
-    let y = 50;
+    let y = 45;
+    let lastModule = "";
 
     history.forEach((item, index) => {
-        if (y > 270) {
+        if (y > 260) {
             doc.addPage();
             y = 20;
         }
+
+        if (item.module !== lastModule) {
+            y += 5;
+            doc.setFillColor(232, 245, 233);
+            doc.rect(20, y - 5, 170, 8, 'F');
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(12);
+            doc.setTextColor(40, 167, 69);
+            doc.text(item.module.toUpperCase(), 25, y);
+
+            lastModule = item.module;
+            y += 12;
+        }
+
         doc.setFont("helvetica", "bold");
-        doc.text(`${index + 1}. ${item.question}`, 20, y);
-        y += 7;
+        doc.setFontSize(11);
+        doc.setTextColor(0, 0, 0);
+
+        const splitQuestion = doc.splitTextToSize(`${index + 1}. ${item.question}`, 160);
+        doc.text(splitQuestion, 20, y);
+        y += (splitQuestion.length * 6);
+
         doc.setFont("helvetica", "normal");
-        doc.text(`   Deine Antwort: ${item.answer} (${item.points} Pkt.)`, 20, y);
-        y += 15;
+        doc.setFontSize(10);
+        doc.setTextColor(60, 60, 60);
+        doc.text(`Antwort: ${item.answer}`, 25, y);
+
+        doc.setFontSize(9);
+        doc.text(`(${item.points} Pkt.)`, 170, y);
+
+        y += 12;
     });
+
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 150);
+        doc.text(`Seite ${i} von ${pageCount} - Generiert am ${new Date().toLocaleDateString()}`, 20, 285);
+    }
 
     doc.save("Umfrage_Ergebnis.pdf");
 }

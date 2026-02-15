@@ -1,42 +1,33 @@
 [
-    {
+  {
+    "moduleTitle": "Allgemeines",
+    "questions": [
+      {
         "q": "Wie startest du am liebsten in den Tag?",
         "options": [
-            { "text": "Mit einer Tasse Kaffee", "weight": 0.85 },
-            { "text": "Mit Sport und Bewegung", "weight": 0.92 },
-            { "text": "Noch fünfmal Schlummern", "weight": 0.12 }
+          {"text": "Kaffee", "weight": 0.8},
+          {"text": "Sport", "weight": 1.0}
         ]
-    },
-    {
-        "q": "Wie stehst du zu Fehlern im Code?",
+      },
+      {
+        "q": "Wie wichtig ist dir Struktur?",
         "options": [
-            { "text": "Ich suche akribisch den Bug", "weight": 0.78 },
-            { "text": "Ich frage sofort ChatGPT", "weight": 0.45 },
-            { "text": "Bugs? Ich kenn' nur Gremlins", "weight": 0.45 },
-            { "text": "PC aus, Feierabend!", "weight": 0.05 }
+          {"text": "Sehr", "weight": 0.9},
+          {"text": "Gar nicht", "weight": 0.2}
         ]
-    },
-    {
-        "q": "Welches Betriebssystem bevorzugst du?",
+      }
+    ]
+  },
+  {
+    "moduleTitle": "Technik & Web",
+    "questions": [
+      {
+        "q": "Bevorzugst du HTML oder CSS?",
         "options": [
-            { "text": "Linux (Terminal ist mein Zuhause)", "weight": 0.98 },
-            { "text": "Windows (Klassiker)", "weight": 0.61 },
-            { "text": "macOS (Design zählt)", "weight": 0.72 }
+          {"text": "HTML", "weight": 0.5},
+          {"text": "CSS", "weight": 0.5}
         ]
-    },
-    {
-        "q": "Wie wichtig ist dir sauberes CSS?",
-        "options": [
-            { "text": "Überlebenswichtig!", "weight": 0.88 },
-            { "text": "Hauptsache es sieht okay aus", "weight": 0.50 }
-        ]
-    },
-    {
-        "q": "Wie verbringst du dein Wochenende?",
-        "options": [
-            { "text": "Neues Framework lernen", "weight": 0.95 },
-            { "text": "Gaming-Marathon", "weight": 0.40 },
-            { "text": "In der Natur ohne WLAN", "weight": 0.66 }
-        ]
-    }
+      }
+    ]
+  }
 ]
