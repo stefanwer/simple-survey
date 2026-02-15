@@ -1,24 +1,61 @@
 [
   {
-    "moduleTitle": "Allgemeines",
+    "moduleTitle": "Demografie & Grundrisiko",
     "questions": [
-      {
-        "q": "Hast du heute schon programmiert?",
-        "score": 3
-      },
-      {
-        "q": "Nutzt du ein Versionsverwaltungstool?",
-        "score": 2
-      }
+      { "q": "Alter ≥ 60 Jahre", "score": 1 },
+      { "q": "Alter ≥ 70 Jahre (zusätzlich zu ≥ 60)", "score": 1 },
+      { "q": "Männliches Geschlecht", "score": 1 },
+      { "q": "Bekannte familiäre Amyloidose / TTR-Mutation", "score": 3 }
     ]
   },
   {
-    "moduleTitle": "Technik & Web",
+    "moduleTitle": "Kardiale Symptome",
     "questions": [
-      {
-        "q": "Kennst du dich mit CSS-Flexbox aus?",
-        "score": 1
-      }
+      { "q": "Belastungsdyspnoe / HF-Symptome (NYHA ≥ II)", "score": 2 },
+      { "q": "Ödeme / Orthopnoe", "score": 1 },
+      { "q": "HFpEF diagnostiziert oder vermutet", "score": 2 },
+      { "q": "Unklare LV-Hypertrophie ohne Hypertonie", "score": 2 },
+      { "q": "Persistierende Fatigue / reduzierte Belastbarkeit", "score": 1 }
+    ]
+  },
+  {
+    "moduleTitle": "Rhythmus & Reizleitung",
+    "questions": [
+      { "q": "Vorhofflimmern/-flutter aktuell oder anamnestisch", "score": 2 },
+      { "q": "Schrittmacherimplantation", "score": 3 },
+      { "q": "AV-Block / relevante Bradykardie", "score": 2 },
+      { "q": "Synkope / Präsynkope ungeklärt", "score": 1 }
+    ]
+  },
+  {
+    "moduleTitle": "Extra-kardiale Red Flags",
+    "questions": [
+      { "q": "Karpaltunnelsyndrom bilateral", "score": 3 },
+      { "q": "Rezidiv-CTS nach OP", "score": 2 },
+      { "q": "Spinalkanalstenose", "score": 2 },
+      { "q": "Atraumatische Bizepssehnenruptur", "score": 2 },
+      { "q": "Polyneuropathie unklarer Genese", "score": 2 },
+      { "q": "Autonome Dysfunktion (Orthostase etc.)", "score": 1 }
+    ]
+  },
+  {
+    "moduleTitle": "Bildgebung / Echo",
+    "questions": [
+      { "q": "LV-Wanddicke ≥ 14 mm", "score": 2 },
+      { "q": "LV-Wanddicke ≥ 16 mm (zusätzlich zu ≥ 14)", "score": 1 },
+      { "q": "Apical sparing im GLS", "score": 4 },
+      { "q": "Restriktives Füllungsmuster", "score": 2 },
+      { "q": "Perikarderguss", "score": 1 }
+    ]
+  },
+  {
+    "moduleTitle": "Labor & Komorbidität",
+    "questions": [
+      { "q": "NT-proBNP oder Troponin erhöht ohne klare Ursache", "score": 2 },
+      { "q": "Monoklonale Gammopathie bekannt (Hinweis: AL-Amyloidose ausschließen!)", "score": 1 },
+      { "q": "Aortenstenose (≥ moderate)", "score": 2 },
+      { "q": "Chronische Niereninsuffizienz", "score": 1 },
+      { "q": "Orthopädische Multimorbidität (z. B. mehrere Sehnen-/ Wirbelsäulenprobleme)", "score": 1 }
     ]
   }
 ]
