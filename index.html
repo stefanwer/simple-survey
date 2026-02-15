@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#28a745">
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
-    <title>Umfrage Start</title>
+    <title>ATTR-Screening-Score</title>
 
     <script>
         if ('serviceWorker' in navigator) {
@@ -21,11 +21,11 @@
 
 <body>
     <div class="container">
-        <h1>Willkommen!</h1>
-        <p>Dies ist eine kleine dynamische Umfrage. Keine Daten werden gespeichert.</p>
+        <h1>ATTR-Screening</h1>
+        <p>Es werden keine Daten gespeichert.</p>
 
         <div class="center-btn-wrapper">
-            <button onclick="startSurvey()">Umfrage starten</button>
+            <button onclick="startSurvey()">Screening starten</button>
         </div>
     </div>
 
@@ -33,7 +33,7 @@
         function startSurvey() {
             sessionStorage.clear();
             sessionStorage.setItem('currentIndex', '0');
-            sessionStorage.setItem('scoreHistory', JSON.stringify([])); // Historie leeren
+            sessionStorage.setItem('scoreHistory', JSON.stringify([]));
             window.location.href = 'question.html';
         }
     </script>
